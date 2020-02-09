@@ -1,9 +1,9 @@
-import jwt from 'jsonwebtoken';
-import { User } from '../interfaces';
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
+import { signup, login } from '../controllers/auth';
 
 const router = Router();
 
-router.post('/login');
+router.post('/login', login);
+router.post('/signup', signup);
 
 export default router;

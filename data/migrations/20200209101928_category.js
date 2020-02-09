@@ -1,9 +1,6 @@
 exports.up = function(knex) {
   return knex.schema.createTable('category', table => {
-    table
-      .increments('id')
-      .unique()
-      .primary();
+    table.increments();
     table.integer('ticket').unsigned();
     table
       .foreign('ticket')
