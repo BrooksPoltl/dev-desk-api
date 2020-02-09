@@ -96,6 +96,29 @@ export const getMyTickets: RequestHandler = async (req, res, next) => {
   }
 };
 
+export const getUnassignedTickets: RequestHandler = (req, res, next) => {
+  try {
+    db('ticket')
+      .where({ assignedTo: null })
+      .then((tickets: Ticket[]) => {
+        res.status(200).json({ status: 200, tickets });
+      })
+      .catch(() => {
+        const errorMessage: ErrorHandler = {
+          status: 400,
+          message: 'could not get tickets'
+        };
+        res.status(400).json(errorMessage);
+      });
+  } catch (e) {
+    const errorMessage: ErrorHandler = {
+      status: 500,
+      message: 'Server error'
+    };
+    res.status(500).json(errorMessage);
+  }
+};
+
 export const createTicket: RequestHandler = async (req, res, next) => {
   console.log(req.body);
   const id = req.body.decodedToken.id;
