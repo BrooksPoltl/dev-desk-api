@@ -21,3 +21,11 @@ export interface Token {
   helper: boolean;
   id: number;
 }
+
+export interface Ticket {
+  id: number;
+  assignedTo: number;
+  createdBy: number;
+  description: string;
+  open: boolean;
+}

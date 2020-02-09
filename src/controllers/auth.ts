@@ -54,7 +54,7 @@ const generateToken = (user: User) => {
   return jwt.sign(payload, secret!, options);
 };
 
-export const signup: RequestHandler = async (req, res, next) => {
+export const signup: RequestHandler = (req, res, next) => {
   try {
     const hash = bcrypt.hashSync(req.body.password, 12);
     req.body.password = hash;
@@ -77,7 +77,7 @@ export const signup: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const login = async (
+export const login = (
   req: {
     body: {
       username: string;
