@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { User, ErrorHandler, Token } from '../interfaces';
 
+require('dotenv').config();
+
 const db = require('../../data/dbConfig');
 
 export const authMiddleware: RequestHandler = async (req, res, next) => {
@@ -75,7 +77,7 @@ export const signup: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const login = (
+export const login = async (
   req: {
     body: {
       username: string;
@@ -104,7 +106,7 @@ export const login = (
         res.status(401).json(errorMessage);
       }
     })
-    .catch(() => {
+    .catch((err: any) => {
       const errorMessage: ErrorHandler = {
         status: 500,
         message: 'server error'
