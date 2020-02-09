@@ -23,9 +23,10 @@ export const authMiddleware: RequestHandler = async (req, res, next) => {
           message: 'invalid token'
         };
         res.status(401).json(errorMessage);
+        return next();
       } else {
         req.body.decodedToken = decodedToken!;
-        next();
+        return next();
       }
     });
   } catch (err) {
@@ -34,8 +35,8 @@ export const authMiddleware: RequestHandler = async (req, res, next) => {
       message: 'could not find token'
     };
     res.status(500).json(errorMessage);
+    return next();
   }
-  next();
 };
 
 const generateToken = (user: User) => {

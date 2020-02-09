@@ -1,10 +1,7 @@
 exports.up = function(knex) {
   return knex.schema.createTable('ticket', table => {
     table.increments();
-    table
-      .integer('assignedTo')
-      .unsigned()
-      .defaultsTo(0);
+    table.integer('assignedTo').unsigned();
     table.foreign('assignedTo').references('users.id');
     table.integer('createdBy').unsigned();
     table

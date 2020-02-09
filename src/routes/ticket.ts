@@ -3,7 +3,8 @@ import {
   getTickets,
   getOpenTickets,
   getClosedTickets,
-  getMyTickets
+  getMyTickets,
+  createTicket
 } from '../controllers/ticket';
 
 import { authMiddleware } from '../controllers/auth';
@@ -14,7 +15,7 @@ router.get('/', getTickets);
 router.get('/open', getOpenTickets);
 router.get('/closed', getClosedTickets);
 router.get('/mine', authMiddleware, getMyTickets);
-router.post('/');
+router.post('/', authMiddleware, createTicket);
 router.patch('/');
 router.delete('/');
 
