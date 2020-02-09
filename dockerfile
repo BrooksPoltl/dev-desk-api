@@ -15,8 +15,5 @@ RUN npm install --production
 
 COPY --from=builder /usr/app/dist ./dist
 
-
-COPY .env .
-
 EXPOSE 3000
 CMD node dist/app.js

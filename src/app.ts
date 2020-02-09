@@ -1,8 +1,5 @@
 import express, { Request, Response } from 'express';
-import dbConfig from './dbConfig';
-import sql from 'mssql';
-
-const pool = new sql.ConnectionPool(dbConfig).connect();
+require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
