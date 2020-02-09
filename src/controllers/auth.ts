@@ -9,12 +9,13 @@ const db = require('../../data/dbConfig');
 
 export const authMiddleware: RequestHandler = async (req, res, next) => {
   const token = req.headers.authorization;
+
   if (!token) {
     return next();
   }
 
   try {
-    const secret: string = process.env.SECRET!;
+    const secret: string = process.env.JWT_SECRET!;
     await jwt.verify(token, secret, (err: Error, decodedToken: any) => {
       if (err) {
         const errorMessage: ErrorHandler = {

@@ -1,6 +1,5 @@
 import { RequestHandler, Response, ErrorRequestHandler } from 'express';
 import { User, ErrorHandler, Ticket } from '../interfaces';
-import { authMiddleware } from './auth';
 
 const db = require('../../data/dbConfig');
 
@@ -72,4 +71,27 @@ export const getClosedTickets: RequestHandler = (req, res, next) => {
   }
 };
 
-export const getMyTickets: RequestHandler = (req, res, next) => {};
+export const getMyTickets: RequestHandler = async (req, res, next) => {
+  const id = req.body.decodedToken.id;
+  const isHelper = req.body.decodedToken.helper;
+  const isStudent = req.body.decodedToken.student;
+  let assignedToMe = [];
+  let createdByMe = [];
+  try {
+    if (isHelper && isStudent) {
+      assignedToMe = await db('ticket').where({ assignedTo: id });
+      createdByMe = await db('ticket').where({ createdBy: id });
+    } else if (isHelper && !isStudent) {
+      assignedToMe = await db('ticket').where({ assignedTo: id });
+    } else if (!isHelper && isStudent) {
+      createdByMe = await db('ticket').where({ createdBy: id });
+    }
+    res.status(200).json({ status: 200, assignedToMe, createdByMe });
+  } catch (e) {
+    const errorMessage: ErrorHandler = {
+      status: 500,
+      message: 'Server error'
+    };
+    res.status(500).json(errorMessage);
+  }
+};
