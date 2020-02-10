@@ -120,7 +120,6 @@ export const getUnassignedTickets: RequestHandler = (req, res, next) => {
 };
 
 export const createTicket: RequestHandler = async (req, res, next) => {
-  console.log(req.body);
   const id = req.body.decodedToken.id;
   const isStudent = req.body.decodedToken.student;
   try {
@@ -135,7 +134,6 @@ export const createTicket: RequestHandler = async (req, res, next) => {
           res.status(201).json({ status: 201, message: 'Success' });
         })
         .catch((err: any) => {
-          console.log(err);
           const errorMessage: ErrorHandler = {
             status: 400,
             message: 'cant create ticket'
