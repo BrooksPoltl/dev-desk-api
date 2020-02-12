@@ -7,16 +7,14 @@ export const getTickets: RequestHandler = (req, res, next) => {
   try {
     db('ticket')
       .then(async (tickets: TicketWithCats[]) => {
-        let response: TicketWithCats[] = [];
         for (let i = 0; i < tickets.length; i++) {
           let newTicket: TicketWithCats = tickets[i];
           const categories = await db('category').where({
             ticket: newTicket.id
           });
           newTicket.categories = categories;
-          response.push(newTicket);
         }
-        res.status(200).json({ status: 200, response });
+        res.status(200).json({ status: 200, tickets });
       })
       .catch(() => {
         const errorMessage: ErrorHandler = {
@@ -39,14 +37,12 @@ export const getOpenTickets: RequestHandler = (req, res, next) => {
     db('ticket')
       .where({ open: true })
       .then(async (tickets: TicketWithCats[]) => {
-        let response: TicketWithCats[] = [];
         for (let i = 0; i < tickets.length; i++) {
           let newTicket: TicketWithCats = tickets[i];
           const categories = await db('category').where({
             ticket: newTicket.id
           });
           newTicket.categories = categories;
-          response.push(newTicket);
         }
         res.status(200).json({ status: 200, tickets });
       })
@@ -70,7 +66,14 @@ export const getClosedTickets: RequestHandler = (req, res, next) => {
   try {
     db('ticket')
       .where({ open: false })
-      .then((tickets: Ticket[]) => {
+      .then(async (tickets: TicketWithCats[]) => {
+        for (let i = 0; i < tickets.length; i++) {
+          let newTicket: TicketWithCats = tickets[i];
+          const categories = await db('category').where({
+            ticket: newTicket.id
+          });
+          newTicket.categories = categories;
+        }
         res.status(200).json({ status: 200, tickets });
       })
       .catch(() => {
