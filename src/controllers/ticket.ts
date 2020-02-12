@@ -190,3 +190,67 @@ export const createTicket: RequestHandler = async (req, res, next) => {
     res.status(500).json(errorMessage);
   }
 };
+
+export const assignTicket: RequestHandler = async (req, res, next) => {
+  const { ticketId } = req.body;
+  if (req.body.decodedToken.helper) {
+    const checkTicket: Ticket = await db('ticket').where({ id: ticketId });
+    if (!checkTicket.assignedTo) {
+      db('ticket')
+        .where({ id: ticketId })
+        .update({ assignedTo: req.body.decodedToken.id })
+        .then(() => {
+          res
+            .status(200)
+            .json({ status: 200, message: 'successfully assigned helper' });
+        })
+        .catch(() => {
+          res.status(500).json({ status: 500, message: 'server error' });
+        });
+    } else {
+      const errorMessage: ErrorHandler = {
+        status: 403,
+        message: 'Ticket already assigned'
+      };
+      res.status(403).json(errorMessage);
+    }
+  } else {
+    const errorMessage: ErrorHandler = {
+      status: 401,
+      message: 'must be a helper to be assigned to ticket'
+    };
+    res.status(401).json(errorMessage);
+  }
+};
+
+export const closeTicket: RequestHandler = async (req, res, next) => {
+  const { ticketId } = req.body;
+  if (req.body.decodedToken.helper) {
+    const checkTicket: Ticket = await db('ticket').where({ id: ticketId });
+    if (checkTicket.assignedTo === req.body.decodedToken.id) {
+      db('ticket')
+        .where({ id: ticketId })
+        .update({ open: false })
+        .then(() => {
+          res
+            .status(200)
+            .json({ status: 200, message: 'successfully closed ticket' });
+        })
+        .catch(() => {
+          res.status(500).json({ status: 500, message: 'server error' });
+        });
+    } else {
+      const errorMessage: ErrorHandler = {
+        status: 403,
+        message: 'Must be assigned to close ticket'
+      };
+      res.status(403).json(errorMessage);
+    }
+  } else {
+    const errorMessage: ErrorHandler = {
+      status: 401,
+      message: 'must be a helper to close a ticket'
+    };
+    res.status(401).json(errorMessage);
+  }
+};

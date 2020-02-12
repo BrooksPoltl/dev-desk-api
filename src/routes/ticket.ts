@@ -5,7 +5,9 @@ import {
   getClosedTickets,
   getUnassignedTickets,
   getMyTickets,
-  createTicket
+  createTicket,
+  closeTicket,
+  assignTicket
 } from '../controllers/ticket';
 
 import { authMiddleware } from '../controllers/auth';
@@ -18,7 +20,6 @@ router.get('/closed', getClosedTickets);
 router.get('/unassigned', getUnassignedTickets);
 router.get('/mine', authMiddleware, getMyTickets);
 router.post('/', authMiddleware, createTicket);
-router.patch('/');
-router.delete('/');
-
+router.patch('/assign', authMiddleware, assignTicket);
+router.patch('/close', authMiddleware, closeTicket);
 export default router;
