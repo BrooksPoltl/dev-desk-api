@@ -107,6 +107,20 @@ export const getMyTickets: RequestHandler = async (req, res, next) => {
     } else if (!isHelper && isStudent) {
       createdByMe = await db('ticket').where({ createdBy: id });
     }
+    for (let i = 0; i < assignedToMe.length; i++) {
+      let newTicket: TicketWithCats = assignedToMe[i];
+      const categories = await db('category').where({
+        ticket: newTicket.id
+      });
+      newTicket.categories = categories;
+    }
+    for (let i = 0; i < createdByMe.length; i++) {
+      let newTicket: TicketWithCats = createdByMe[i];
+      const categories = await db('category').where({
+        ticket: newTicket.id
+      });
+      newTicket.categories = categories;
+    }
     res.status(200).json({ status: 200, assignedToMe, createdByMe });
   } catch (e) {
     const errorMessage: ErrorHandler = {

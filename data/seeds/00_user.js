@@ -8,7 +8,8 @@ exports.seed = function(knex) {
         {
           firstName: 'brooks',
           lastName: 'poltl',
-          password: '1234',
+          password:
+            '$2a$12$WoxbeSd5k1eFSBlVECGxmertZnfmeBt2ZuKnXtZBBgFCVa.HCxYzC',
           student: true,
           helper: false,
           username: 'bpoltl'
@@ -16,7 +17,8 @@ exports.seed = function(knex) {
         {
           firstName: 'john',
           lastName: 'smith',
-          password: '1234',
+          password:
+            '$2a$12$WoxbeSd5k1eFSBlVECGxmertZnfmeBt2ZuKnXtZBBgFCVa.HCxYzC',
           student: false,
           helper: true,
           username: 'jsmith'
@@ -24,7 +26,8 @@ exports.seed = function(knex) {
         {
           firstName: 'patrick',
           lastName: 'mahomes',
-          password: '1234',
+          password:
+            '$2a$12$WoxbeSd5k1eFSBlVECGxmertZnfmeBt2ZuKnXtZBBgFCVa.HCxYzC',
           student: true,
           helper: true,
           username: 'pmahomes'
