@@ -3,7 +3,7 @@ import { User, ErrorHandler, Ticket, TicketWithCats } from '../interfaces';
 
 const db = require('../../data/dbConfig');
 
-export const getTickets: RequestHandler = async (req, res, next) => {
+export const getTickets: RequestHandler = (req, res, next) => {
   try {
     db('ticket')
       .then(async (tickets: TicketWithCats[]) => {
@@ -38,7 +38,16 @@ export const getOpenTickets: RequestHandler = (req, res, next) => {
   try {
     db('ticket')
       .where({ open: true })
-      .then((tickets: Ticket[]) => {
+      .then(async (tickets: TicketWithCats[]) => {
+        let response: TicketWithCats[] = [];
+        for (let i = 0; i < tickets.length; i++) {
+          let newTicket: TicketWithCats = tickets[i];
+          const categories = await db('category').where({
+            ticket: newTicket.id
+          });
+          newTicket.categories = categories;
+          response.push(newTicket);
+        }
         res.status(200).json({ status: 200, tickets });
       })
       .catch(() => {
