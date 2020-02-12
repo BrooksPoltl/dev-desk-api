@@ -1,3 +1,5 @@
+import e = require('express');
+
 export interface User {
   id: number;
   firstName: string;
@@ -28,4 +30,14 @@ export interface Ticket {
   createdBy: number;
   description: string;
   open: boolean;
+}
+
+export interface Category {
+  id: number;
+  ticket: string;
+  category: string;
+}
+
+export interface TicketWithCats extends Ticket {
+  categories: Category[];
 }

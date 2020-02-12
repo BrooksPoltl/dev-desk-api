@@ -1,13 +1,22 @@
 import { RequestHandler, Response, ErrorRequestHandler } from 'express';
-import { User, ErrorHandler, Ticket } from '../interfaces';
+import { User, ErrorHandler, Ticket, TicketWithCats } from '../interfaces';
 
 const db = require('../../data/dbConfig');
 
-export const getTickets: RequestHandler = (req, res, next) => {
+export const getTickets: RequestHandler = async (req, res, next) => {
   try {
     db('ticket')
-      .then((tickets: Ticket[]) => {
-        res.status(200).json({ status: 200, tickets });
+      .then(async (tickets: TicketWithCats[]) => {
+        let response: TicketWithCats[] = [];
+        for (let i = 0; i < tickets.length; i++) {
+          let newTicket: TicketWithCats = tickets[i];
+          const categories = await db('category').where({
+            ticket: newTicket.id
+          });
+          newTicket.categories = categories;
+          response.push(newTicket);
+        }
+        res.status(200).json({ status: 200, response });
       })
       .catch(() => {
         const errorMessage: ErrorHandler = {
