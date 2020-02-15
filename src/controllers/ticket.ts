@@ -192,14 +192,14 @@ export const createTicket: RequestHandler = async (req, res, next) => {
 };
 
 export const assignTicket: RequestHandler = async (req, res, next) => {
-  const { ticketId } = req.body;
-  if (req.body.decodedToken.helper) {
+  const { ticketId, decodedToken } = req.body;
+  if (decodedToken.helper) {
     const checkTickets: Ticket[] = await db('ticket').where({ id: ticketId });
     const ticket: Ticket = checkTickets[0];
     if (!ticket.assignedTo) {
       db('ticket')
         .where({ id: ticketId })
-        .update({ assignedTo: req.body.decodedToken.id })
+        .update({ assignedTo: decodedToken.id })
         .then(() => {
           res
             .status(200)
@@ -225,11 +225,14 @@ export const assignTicket: RequestHandler = async (req, res, next) => {
 };
 
 export const closeTicket: RequestHandler = async (req, res, next) => {
-  const { ticketId } = req.body;
-  if (req.body.decodedToken.helper) {
+  const { ticketId, decodedToken } = req.body;
+  if (decodedToken.helper) {
     const checkTickets: Ticket[] = await db('ticket').where({ id: ticketId });
     const ticket: Ticket = checkTickets[0];
-    if (ticket.assignedTo === req.body.decodedToken.id) {
+    if (
+      ticket.assignedTo === decodedToken.id ||
+      decodedToken.id === ticket.createdBy
+    ) {
       db('ticket')
         .where({ id: ticketId })
         .update({ open: false })
