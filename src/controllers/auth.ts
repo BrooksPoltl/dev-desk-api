@@ -5,7 +5,7 @@ import { User, ErrorHandler, Token } from '../interfaces';
 
 require('dotenv').config();
 
-const db = require('../../data/dbConfig');
+const db = require('../dbConfig');
 
 export const authMiddleware: RequestHandler = async (req, res, next) => {
   const token = req.headers.authorization;

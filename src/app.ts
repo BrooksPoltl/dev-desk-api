@@ -3,7 +3,6 @@ import cors from 'cors';
 import helmet from 'helmet';
 import auth from './routes/auth';
 import ticket from './routes/ticket';
-import { authMiddleware } from './controllers/auth';
 import json from 'body-parser';
 
 require('dotenv').config();

@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon dist/src/app.js",
+    "start": "node dist/app.js",
     "build": "tsc -b",
     "migration:seed": "knex migrate:rollback && knex migrate:latest && knex seed:run"
   },

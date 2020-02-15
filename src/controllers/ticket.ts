@@ -1,7 +1,7 @@
 import { RequestHandler, Response, ErrorRequestHandler } from 'express';
 import { User, ErrorHandler, Ticket, TicketWithCats } from '../interfaces';
 
-const db = require('../../data/dbConfig');
+const db = require('../dbConfig');
 
 export const getTickets: RequestHandler = (req, res, next) => {
   try {
