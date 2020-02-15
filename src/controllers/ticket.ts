@@ -194,8 +194,9 @@ export const createTicket: RequestHandler = async (req, res, next) => {
 export const assignTicket: RequestHandler = async (req, res, next) => {
   const { ticketId } = req.body;
   if (req.body.decodedToken.helper) {
-    const checkTicket: Ticket = await db('ticket').where({ id: ticketId });
-    if (!checkTicket.assignedTo) {
+    const checkTickets: Ticket[] = await db('ticket').where({ id: ticketId });
+    const ticket: Ticket = checkTickets[0];
+    if (!ticket.assignedTo) {
       db('ticket')
         .where({ id: ticketId })
         .update({ assignedTo: req.body.decodedToken.id })
@@ -226,8 +227,9 @@ export const assignTicket: RequestHandler = async (req, res, next) => {
 export const closeTicket: RequestHandler = async (req, res, next) => {
   const { ticketId } = req.body;
   if (req.body.decodedToken.helper) {
-    const checkTicket: Ticket = await db('ticket').where({ id: ticketId });
-    if (checkTicket.assignedTo === req.body.decodedToken.id) {
+    const checkTickets: Ticket[] = await db('ticket').where({ id: ticketId });
+    const ticket: Ticket = checkTickets[0];
+    if (ticket.assignedTo === req.body.decodedToken.id) {
       db('ticket')
         .where({ id: ticketId })
         .update({ open: false })
